@@ -4,6 +4,8 @@ class CreateFacts < ActiveRecord::Migration
       t.string :title
       t.text :body
 
+      t.integer :impressions_count
+
       t.references :user, index: true
 
       t.timestamps null: false

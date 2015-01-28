@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     resources :facts, except: [:new, :edit]
 
     resources :votes, except: [:new, :edit]
+
+    post   'sign_in'   => 'auth#sign_in'
+    delete 'sign_out'  => 'auth#sign_out'
+    get 'get_current_user' => 'auth#get_current_user'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
