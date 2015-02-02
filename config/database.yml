@@ -3,11 +3,11 @@ default: &default
   pool: 25
   timeout: 5000
   encoding: unicode
-  username: kmurph
 
 development:
   <<: *default
   database: physdev
+  username: kmurph
 
 # warning: the database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -20,3 +20,4 @@ test:
 production:
   <<: *default
   database: physprod
+  username: deploy
