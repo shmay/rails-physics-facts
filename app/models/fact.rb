@@ -1,4 +1,4 @@
-require 'byebug'
+#require 'byebug'
 
 class Fact < ActiveRecord::Base
   belongs_to :user
