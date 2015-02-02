@@ -14,6 +14,12 @@ gem 'impressionist'
 gem 'postgres_ext'
 gem 'rails_12factor'
 
+gem 'capistrano'
+gem 'capistrano-rbenv', '~> 2.0'
+gem 'capistrano-bundler'
+gem 'capistrano-rails', '~> 1.1'
+gem 'capistrano-passenger'
+
 gem 'active_model_serializers', '~> 0.8.0'
 # Use CoffeeScript for .coffee assets and views
 #gem 'coffee-rails', '~> 4.1.0'
