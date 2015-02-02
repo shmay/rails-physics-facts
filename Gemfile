@@ -11,6 +11,7 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'impressionist'
 gem 'postgres_ext'
+gem 'rails_12factor'
 
 gem 'active_model_serializers', '~> 0.8.0'
 # Use CoffeeScript for .coffee assets and views
