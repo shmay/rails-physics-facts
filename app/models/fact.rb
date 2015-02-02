@@ -70,12 +70,7 @@ class Fact < ActiveRecord::Base
   def self.fact_query(id,user_id)
     query = with(facts_w_votes: Fact.facts_w_votes(user_id)).
     select(get_selects(user_id)).
-    joins(%{
-      inner join users on users.id = facts.user_id
-      inner join taggings on taggings.fact_id = facts.id
-      inner join tags on tags.id = taggings.tag_id
-      left join facts_w_votes on facts_w_votes.id = facts.id
-    })
+    joins(get_joins(user_id))
 
     groups = [
       'facts.id', 'users.username',
@@ -90,7 +85,7 @@ class Fact < ActiveRecord::Base
       query = query.where('facts.id = ?',id)
     end
 
-    query = query.group(groups)
+    query = query.group(groups).order('created_at desc')
 
     query
   end
@@ -102,11 +97,25 @@ class Fact < ActiveRecord::Base
         'ARRAY_AGG(tags.name) AS tag_names']
 
     if user_id
-      selects << 'facts_w_votes.user_vote'
+      selects << 'facts_w_votes.user_vote, count(distinct(starrings.id)) as starred'
     end
 
     selects
   end
 
+  def self.get_joins(user_id)
+    joins = [
+      "inner join users on users.id = facts.user_id",
+      "inner join taggings on taggings.fact_id = facts.id",
+      "inner join tags on tags.id = taggings.tag_id",
+      "left join facts_w_votes on facts_w_votes.id = facts.id"
+    ]
+
+    if user_id
+      joins << "left join starrings on starrings.fact_id = facts.id and starrings.user_id = #{user_id}"
+    end
+
+    joins
+  end
 
 end

@@ -11,7 +11,11 @@ Rails.application.routes.draw do
 
     resources :comments, except: [:new, :edit]
 
-    resources :facts, except: [:new, :edit]
+    resources :facts, except: [:new, :edit] do
+      member do
+        post 'star'
+      end
+    end
 
     resources :votes, except: [:new, :edit]
 

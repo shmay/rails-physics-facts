@@ -17,24 +17,27 @@ shmay = User.create email: 'chobo@map.net', username: 'shmay', password: 'pass12
 
 facts = [
   {
-    title: 'did you know that there was some craziness during 1989?',
-    tag_list: 'craziness,facty,what,how',
-    body: 'yup it happened like *dis*\n\n ya know?'
+    title: 'This site is being built in Polymer JS (Web Components) and Rails',
+    tag_list: 'polymerjs,rails,kyle,notaphysicsfact',
+    body: 'polymer js alone is interesting; components can be extracted from apps for public and private reuse; easy to use material design as well;  rails is also cool'
   },
   {
-    title: 'they dont tink like i tink',
-    tag_list: 'dude,bro,what,how',
-    body: 'yup it happened like *dis*\n\n ya know?'
+    title: "click on the 'ADD NEW FACT' button to see a cool composer drawer pop up",
+    tag_list: 'thissite,notaphysicsfact',
+    body: "this\n\nhas return"
   },
   {
-    title: 'dey dun talk like i tulk',
-    tag_list: 'craziness,nope,yes,what',
-    body: 'yup it happened like *dis*\n\n ya know?'
+    title: 'two particles can exist in an entangled state',
+    tag_list: 'quantum,quantum-entanglement',
+    body: 'spooky action at a distance'
   },
   {
-    title: 'harby darby sarby garby',
-    tag_list: 'nony,ihop,mcgregor,where',
-    body: 'nonononononoononono'
+    title: 'the holographic principle',
+    tag_list: 'holographic-principle',
+    body: %{The holographic principle is a property of string theories and a supposed property of quantum gravity that states that the description of a volume of space can be thought of as encoded on a boundary to the region; 
+      \n source: [wikipedia](http://en.wikipedia.org/wiki/Holographic_principle)
+      \n\nreally interesting video here: https://www.youtube.com/watch?v=PLc5Pzas4l8
+    }
   }
 ]
 
@@ -44,6 +47,7 @@ facts.each_with_index do |f,i|
 
   vote1 = nil
   vote2 = nil
+
   if i == 0
     vote1 = Vote.new(dir: -1, user_id: me.id)
     vote2 = Vote.new(dir: 1, user_id: shmay.id)

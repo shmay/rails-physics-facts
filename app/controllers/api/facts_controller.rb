@@ -29,8 +29,21 @@ class Api::FactsController < Api::ApplicationController
     end
   end
 
+  def star
+    star = Starring.where(user_id:current_user.id,fact_id:params[:id]).first
+
+    if star
+      star.destroy
+      render json: star
+    else
+      star = Starring.create(user_id:current_user.id,fact_id:params[:id])
+
+      render json: star, status: :created
+    end
+  end
+
   def destroy
-    @vote.destroy
+    @fact.destroy
 
     head :no_content
   end
