@@ -1,5 +1,5 @@
 class Api::UsersController < Api::ApplicationController
-  def blah
-    render json: {}
+  def current
+    render json: @current_user, UserSerializer
   end
 end
