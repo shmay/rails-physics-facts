@@ -51,6 +51,14 @@ set :linked_files, %w{config/database.yml .rbenv-vars config/secrets.yml}
 
 namespace :deploy do
 
+  task :update_client do
+    on roles(:web) do
+      execute %{cd ~/polymer-physics-facts && git pull && cd ..}
+      execute %{rm #{release_path}/public/*}
+      execute %{cp ~/polymer-physics-facts/dist/* #{release_path}/public/}
+    end
+  end
+
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:

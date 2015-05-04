@@ -23,6 +23,7 @@ class Api::VotesController < Api::ApplicationController
     end
   end
 
+
   def destroy
     Vote.where(fact_id:params[:id], user_id:current_user.id).each &:destroy
 

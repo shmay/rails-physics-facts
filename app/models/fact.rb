@@ -1,4 +1,4 @@
-#require 'byebug'
+require 'byebug'
 
 class Fact < ActiveRecord::Base
   belongs_to :user
@@ -10,9 +10,20 @@ class Fact < ActiveRecord::Base
 
   is_impressionable :counter_cache => true
 
+  validates :title, presence: true, length: { maximum: 50 }
+  validates :body, presence: true, length: { minimum: 10 }
+
+  validate :has_tag
+
   attr_accessor :tag_list
 
   after_save :check_tags
+
+  def has_tag
+    if !self.tag_list || self.tag_list.length == 0
+      errors.add(:base, 'must have at least one tag')
+    end
+  end
 
   def check_tags
     tag_list = self.tag_list
@@ -30,6 +41,12 @@ class Fact < ActiveRecord::Base
         Tagging.create fact_id:self.id, tag_id:t.id
       end
     end
+  end
+
+  def self.shallow_facts(user_id)
+    query = fact_query(nil, user_id, true)
+
+    self.find_by_sql(query.to_sql)
   end
 
   def self.find_with_stats(id, user_id)
@@ -67,9 +84,9 @@ class Fact < ActiveRecord::Base
 
   private
 
-  def self.fact_query(id,user_id)
+  def self.fact_query(id,user_id, shallow = nil)
     query = with(facts_w_votes: Fact.facts_w_votes(user_id)).
-    select(get_selects(user_id)).
+    select(get_selects(user_id, shallow)).
     joins(get_joins(user_id))
 
     groups = [
@@ -90,11 +107,15 @@ class Fact < ActiveRecord::Base
     query
   end
 
-  def self.get_selects(user_id)
+  def self.get_selects(user_id, shallow)
     selects = [
-      'facts.id', 'facts.impressions_count', 'facts.title', 'facts.body', 'facts.user_id',
+      'facts.id', 'facts.impressions_count', 'facts.title', 'facts.user_id',
         'facts.created_at', 'facts_w_votes.votes_count', 'users.username',
         'ARRAY_AGG(tags.name) AS tag_names']
+
+    if !shallow
+      selects << 'facts.body'
+    end
 
     if user_id
       selects << 'facts_w_votes.user_vote, count(distinct(starrings.id)) as starred'

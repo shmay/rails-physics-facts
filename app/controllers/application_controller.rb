@@ -4,4 +4,8 @@ class ApplicationController < ActionController::Base
   #protect_from_forgery with: :exception
 
   protect_from_forgery with: :null_session
+
+  def index
+    render :file => 'public/assets/index-d6f94def14356148af6eeaf2266763a8.html'
+  end
 end
